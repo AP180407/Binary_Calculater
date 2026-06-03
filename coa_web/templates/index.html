@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arithmetic Micro-Operations Calculator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+<script src="https://sites.super.myninja.ai/_assets/ninja-daytona-script.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Header Section -->
+        <header class="header">
+            <h1>Arithmetic Micro-Operations Calculator</h1>
+            <p class="subtitle">Computer Organization and Architecture</p>
+            <div class="topic-badge">
+                <span>Binary Arithmetic Operations</span>
+            </div>
+        </header>
+
+        <!-- Main Calculator Section -->
+        <main class="calculator">
+            <!-- Input Section -->
+            <section class="input-section">
+                <div class="input-group">
+                    <label for="operand1">First Operand (Binary)</label>
+                    <div class="input-wrapper">
+                        <input type="text" id="operand1" placeholder="Enter binary number (e.g., 1010)" 
+                               pattern="[01]*" autocomplete="off">
+                        <span class="decimal-display" id="dec1"></span>
+                    </div>
+                    <span class="error-message" id="error1"></span>
+                </div>
+
+                <div class="input-group" id="operand2-group">
+                    <label for="operand2">Second Operand (Binary)</label>
+                    <div class="input-wrapper">
+                        <input type="text" id="operand2" placeholder="Enter binary number (e.g., 0011)" 
+                               pattern="[01]*" autocomplete="off">
+                        <span class="decimal-display" id="dec2"></span>
+                    </div>
+                    <span class="error-message" id="error2"></span>
+                </div>
+
+                <div class="input-group" id="positions-group" style="display: none;">
+                    <label for="positions">Shift Positions</label>
+                    <input type="number" id="positions" value="1" min="1" max="16">
+                </div>
+            </section>
+
+            <!-- Operation Selection -->
+            <section class="operations-section">
+                <h2>Select Operation</h2>
+                
+                <div class="operation-category">
+                    <h3>Basic Arithmetic Operations</h3>
+                    <div class="button-grid">
+                        <button class="op-btn" data-operation="addition" data-operands="2">
+                            <span class="op-icon">+</span>
+                            <span class="op-name">Addition</span>
+                            <span class="op-desc">Binary addition with carry</span>
+                        </button>
+                        <button class="op-btn" data-operation="subtraction" data-operands="2">
+                            <span class="op-icon">−</span>
+                            <span class="op-name">Subtraction</span>
+                            <span class="op-desc">2's complement method</span>
+                        </button>
+                        <button class="op-btn" data-operation="multiplication" data-operands="2">
+                            <span class="op-icon">×</span>
+                            <span class="op-name">Multiplication</span>
+                            <span class="op-desc">Shift and add algorithm</span>
+                        </button>
+                        <button class="op-btn" data-operation="division" data-operands="2">
+                            <span class="op-icon">÷</span>
+                            <span class="op-name">Division</span>
+                            <span class="op-desc">Restoring division</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="operation-category">
+                    <h3>Shift Operations</h3>
+                    <div class="button-grid">
+                        <button class="op-btn" data-operation="shift_left" data-operands="1">
+                            <span class="op-icon">≪</span>
+                            <span class="op-name">Shift Left</span>
+                            <span class="op-desc">Multiply by 2ⁿ</span>
+                        </button>
+                        <button class="op-btn" data-operation="shift_right" data-operands="1">
+                            <span class="op-icon">≫</span>
+                            <span class="op-name">Shift Right</span>
+                            <span class="op-desc">Divide by 2ⁿ</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="operation-category">
+                    <h3>Complement & Counter Operations</h3>
+                    <div class="button-grid">
+                        <button class="op-btn" data-operation="ones_complement" data-operands="1">
+                            <span class="op-icon">¬</span>
+                            <span class="op-name">1's Complement</span>
+                            <span class="op-desc">Bitwise inversion</span>
+                        </button>
+                        <button class="op-btn" data-operation="twos_complement" data-operands="1">
+                            <span class="op-icon">−</span>
+                            <span class="op-name">2's Complement</span>
+                            <span class="op-desc">Negative representation</span>
+                        </button>
+                        <button class="op-btn" data-operation="increment" data-operands="1">
+                            <span class="op-icon">++</span>
+                            <span class="op-name">Increment</span>
+                            <span class="op-desc">Add 1 (+1)</span>
+                        </button>
+                        <button class="op-btn" data-operation="decrement" data-operands="1">
+                            <span class="op-icon">−−</span>
+                            <span class="op-name">Decrement</span>
+                            <span class="op-desc">Subtract 1 (−1)</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Result Section -->
+            <section class="result-section">
+                <h2>Result</h2>
+                <div class="result-container" id="result-container">
+                    <div class="result-placeholder">
+                        Enter binary numbers and select an operation to see the result
+                    </div>
+                </div>
+                <div class="explanation-container" id="explanation-container">
+                    <!-- Explanation will appear here -->
+                </div>
+            </section>
+
+            <!-- Clear Button -->
+            <div class="action-buttons">
+                <button class="clear-btn" id="clear-btn">Clear All</button>
+            </div>
+        </main>
+
+        <!-- Reference Section -->
+        <aside class="reference-section">
+            <h2>Quick Reference</h2>
+            
+            <div class="reference-grid">
+                <div class="reference-card">
+                    <h3>Binary Addition</h3>
+                    <p>0 + 0 = 0</p>
+                    <p>0 + 1 = 1</p>
+                    <p>1 + 0 = 1</p>
+                    <p>1 + 1 = 10 (carry 1)</p>
+                </div>
+
+                <div class="reference-card">
+                    <h3>2's Complement</h3>
+                    <p>Step 1: Invert all bits</p>
+                    <p>Step 2: Add 1</p>
+                    <p class="example">Example: 5 = 0101</p>
+                    <p class="example">-5 = 1010 + 1 = 1011</p>
+                </div>
+
+                <div class="reference-card">
+                    <h3>Shift Operations</h3>
+                    <p><strong>Left Shift:</strong> ×2 per position</p>
+                    <p class="example">101 ≪ 1 = 1010 (5×2=10)</p>
+                    <p><strong>Right Shift:</strong> ÷2 per position</p>
+                    <p class="example">1010 ≫ 1 = 101 (10÷2=5)</p>
+                </div>
+
+                <div class="reference-card">
+                    <h3>Subtraction Method</h3>
+                    <p>A − B = A + (−B)</p>
+                    <p>Use 2's complement of B</p>
+                    <p class="example">7 − 3 = 7 + (−3)</p>
+                    <p class="example">= 0111 + 1101 = 0100</p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Computer Organization and Architecture - Arithmetic Micro-Operations</p>
+            <p class="credits">Developed for Academic Presentation</p>
+        </footer>
+    </div>
+
+    <script>
+        // DOM Elements
+        const operand1Input = document.getElementById('operand1');
+        const operand2Input = document.getElementById('operand2');
+        const operand2Group = document.getElementById('operand2-group');
+        const positionsGroup = document.getElementById('positions-group');
+        const positionsInput = document.getElementById('positions');
+        const resultContainer = document.getElementById('result-container');
+        const explanationContainer = document.getElementById('explanation-container');
+        const clearBtn = document.getElementById('clear-btn');
+        const dec1Display = document.getElementById('dec1');
+        const dec2Display = document.getElementById('dec2');
+        const error1 = document.getElementById('error1');
+        const error2 = document.getElementById('error2');
+
+        // Selected operation
+        let selectedOperation = null;
+        let requiredOperands = 2;
+
+        // Validate binary input
+        function isValidBinary(value) {
+            return /^[01]*$/.test(value);
+        }
+
+        // Convert binary to decimal and display
+        function updateDecimalDisplay(input, display) {
+            const value = input.value.trim();
+            if (value && isValidBinary(value)) {
+                const decimal = parseInt(value, 2);
+                display.textContent = `= ${decimal}₁₀`;
+                display.classList.add('visible');
+            } else {
+                display.textContent = '';
+                display.classList.remove('visible');
+            }
+        }
+
+        // Show error message
+        function showError(element, message) {
+            element.textContent = message;
+            element.classList.add('visible');
+        }
+
+        // Clear error message
+        function clearError(element) {
+            element.textContent = '';
+            element.classList.remove('visible');
+        }
+
+        // Input validation
+        operand1Input.addEventListener('input', (e) => {
+            const value = e.target.value;
+            if (!isValidBinary(value)) {
+                showError(error1, 'Only 0s and 1s allowed');
+                e.target.value = value.replace(/[^01]/g, '');
+            } else {
+                clearError(error1);
+            }
+            updateDecimalDisplay(operand1Input, dec1Display);
+        });
+
+        operand2Input.addEventListener('input', (e) => {
+            const value = e.target.value;
+            if (!isValidBinary(value)) {
+                showError(error2, 'Only 0s and 1s allowed');
+                e.target.value = value.replace(/[^01]/g, '');
+            } else {
+                clearError(error2);
+            }
+            updateDecimalDisplay(operand2Input, dec2Display);
+        });
+
+        // Operation button handlers
+        document.querySelectorAll('.op-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Remove active class from all buttons
+                document.querySelectorAll('.op-btn').forEach(b => b.classList.remove('active'));
+                
+                // Add active class to clicked button
+                this.classList.add('active');
+                
+                // Store selected operation
+                selectedOperation = this.dataset.operation;
+                requiredOperands = parseInt(this.dataset.operands);
+                
+                // Show/hide second operand input
+                if (requiredOperands === 1) {
+                    operand2Group.style.opacity = '0.3';
+                    operand2Input.disabled = true;
+                } else {
+                    operand2Group.style.opacity = '1';
+                    operand2Input.disabled = false;
+                }
+                
+                // Show/hide positions input
+                if (selectedOperation === 'shift_left' || selectedOperation === 'shift_right') {
+                    positionsGroup.style.display = 'block';
+                } else {
+                    positionsGroup.style.display = 'none';
+                }
+                
+                // Perform calculation
+                calculate();
+            });
+        });
+
+        // Positions input change handler
+        positionsInput.addEventListener('change', () => {
+            if (selectedOperation) {
+                calculate();
+            }
+        });
+
+        // Calculate function
+        async function calculate() {
+            if (!selectedOperation) return;
+            
+            const operand1 = operand1Input.value.trim();
+            const operand2 = operand2Input.value.trim();
+            const positions = parseInt(positionsInput.value) || 1;
+            
+            // Validate inputs
+            if (!operand1) {
+                showResult('Please enter the first operand', 'error');
+                return;
+            }
+            
+            if (requiredOperands === 2 && !operand2) {
+                showResult('Please enter the second operand', 'error');
+                return;
+            }
+            
+            // Prepare request data
+            const requestData = {
+                operation: selectedOperation,
+                operand1: operand1,
+                operand2: operand2,
+                positions: positions
+            };
+            
+            try {
+                // Show loading state
+                resultContainer.innerHTML = '<div class="loading">Calculating...</div>';
+                
+                // Make API call
+                const response = await fetch('/calculate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestData)
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showResult(data.result, 'success', data.explanation);
+                } else {
+                    showResult(data.error, 'error');
+                }
+                
+            } catch (error) {
+                showResult('Server error. Please try again.', 'error');
+                console.error('Error:', error);
+            }
+        }
+
+        // Show result function
+        function showResult(result, type, explanation = '') {
+            resultContainer.innerHTML = '';
+            
+            const resultDiv = document.createElement('div');
+            resultDiv.className = `result-value ${type}`;
+            
+            if (type === 'success') {
+                resultDiv.innerHTML = `
+                    <span class="result-label">Result:</span>
+                    <span class="result-binary">${result}</span>
+                `;
+            } else {
+                resultDiv.innerHTML = `
+                    <span class="error-text">${result}</span>
+                `;
+            }
+            
+            resultContainer.appendChild(resultDiv);
+            
+            // Show explanation
+            if (explanation) {
+                explanationContainer.innerHTML = `
+                    <h3>Explanation</h3>
+                    <pre class="explanation-text">${explanation}</pre>
+                `;
+                explanationContainer.classList.add('visible');
+            } else {
+                explanationContainer.classList.remove('visible');
+            }
+        }
+
+        // Clear button handler
+        clearBtn.addEventListener('click', () => {
+            operand1Input.value = '';
+            operand2Input.value = '';
+            positionsInput.value = '1';
+            selectedOperation = null;
+            
+            // Reset UI
+            document.querySelectorAll('.op-btn').forEach(b => b.classList.remove('active'));
+            operand2Group.style.opacity = '1';
+            operand2Input.disabled = false;
+            positionsGroup.style.display = 'none';
+            
+            // Clear displays
+            dec1Display.textContent = '';
+            dec2Display.textContent = '';
+            dec1Display.classList.remove('visible');
+            dec2Display.classList.remove('visible');
+            
+            // Reset result
+            resultContainer.innerHTML = `
+                <div class="result-placeholder">
+                    Enter binary numbers and select an operation to see the result
+                </div>
+            `;
+            explanationContainer.classList.remove('visible');
+            explanationContainer.innerHTML = '';
+            
+            // Clear errors
+            clearError(error1);
+            clearError(error2);
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('Arithmetic Micro-Operations Calculator loaded');
+        });
+    </script>
+</body>
+</html>

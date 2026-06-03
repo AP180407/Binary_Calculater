@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Binary Calculator | Arithmetic Micro-Operations</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://sites.super.myninja.ai/_assets/ninja-daytona-script.js"></script>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="bg-grid"></div>
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
+    <div class="bg-glow bg-glow-3"></div>
+    <div class="binary-rain" id="binaryRain"></div>
+
+    <!-- Message Toast -->
+    <div class="message-toast" id="messageToast"></div>
+
+    <!-- History Toggle Button -->
+    <button class="history-toggle" id="historyToggle" title="Calculation History">
+        <i class="fas fa-clock-rotate-left"></i>
+        <span class="badge" id="historyBadge">0</span>
+    </button>
+
+    <!-- History Overlay -->
+    <div class="history-overlay" id="historyOverlay"></div>
+
+    <!-- History Panel -->
+    <div class="history-panel" id="historyPanel">
+        <div class="history-header">
+            <h2><i class="fas fa-clock-rotate-left" style="color: var(--primary); margin-right: 0.5rem;"></i>History</h2>
+            <div class="history-actions">
+                <button class="history-action-btn" id="clearHistoryBtn" title="Clear all history">
+                    <i class="fas fa-trash"></i> Clear All
+                </button>
+            </div>
+        </div>
+        <div class="history-list" id="historyList">
+            <div class="history-empty" id="historyEmpty">
+                <div class="empty-icon"><i class="fas fa-calculator"></i></div>
+                <p>No calculations yet</p>
+                <p style="font-size: 0.75rem; margin-top: 0.5rem;">Your calculation history will appear here</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <h1>Binary Calculator</h1>
+        <p class="subtitle">Arithmetic Micro-Operations &bull; Computer Organization & Architecture</p>
+    </header>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <!-- Left Column: Calculator Input -->
+        <div>
+            <!-- Input Card -->
+            <div class="card-3d" style="margin-bottom: 1.5rem;">
+                <div class="card-title">
+                    <span class="icon"><i class="fas fa-keyboard"></i></span>
+                    Input Operands
+                </div>
+
+                <!-- Operand 1 -->
+                <div class="input-group">
+                    <label>Operand 1 (Binary)</label>
+                    <div class="input-wrapper">
+                        <input type="text" 
+                               class="binary-input" 
+                               id="operand1" 
+                               placeholder="e.g. 1010 or 1010.11"
+                               autocomplete="off"
+                               spellcheck="false">
+                        <span class="decimal-display" id="decDisplay1">
+                            <span class="label">= </span><span class="value">0</span>
+                        </span>
+                    </div>
+                    <div class="bit-visual" id="bitVisual1"></div>
+                </div>
+
+                <!-- Operand 2 -->
+                <div class="input-group">
+                    <label>Operand 2 (Binary) <span id="op2Required" style="color: var(--danger); font-size: 0.7rem;">* Required for binary ops</span></label>
+                    <div class="input-wrapper">
+                        <input type="text" 
+                               class="binary-input" 
+                               id="operand2" 
+                               placeholder="e.g. 0011 or 11.01"
+                               autocomplete="off"
+                               spellcheck="false">
+                        <span class="decimal-display" id="decDisplay2">
+                            <span class="label">= </span><span class="value">0</span>
+                        </span>
+                    </div>
+                    <div class="bit-visual" id="bitVisual2"></div>
+                </div>
+            </div>
+
+            <!-- Operations Card -->
+            <div class="card-3d" style="margin-bottom: 1.5rem;">
+                <div class="card-title">
+                    <span class="icon"><i class="fas fa-microchip"></i></span>
+                    Micro-Operations
+                </div>
+
+                <div class="operations-grid">
+                    <button class="op-btn" data-op="addition" data-needs-op2="true">
+                        <span class="op-symbol">+</span>
+                        <span>Add</span>
+                    </button>
+                    <button class="op-btn" data-op="subtraction" data-needs-op2="true">
+                        <span class="op-symbol">&minus;</span>
+                        <span>Subtract</span>
+                    </button>
+                    <button class="op-btn" data-op="multiplication" data-needs-op2="true">
+                        <span class="op-symbol">&times;</span>
+                        <span>Multiply</span>
+                    </button>
+                    <button class="op-btn" data-op="division" data-needs-op2="true">
+                        <span class="op-symbol">&divide;</span>
+                        <span>Divide</span>
+                    </button>
+                    <button class="op-btn" data-op="shift_left" data-needs-op2="false">
+                        <span class="op-symbol">&laquo;</span>
+                        <span>Shift L</span>
+                    </button>
+                    <button class="op-btn" data-op="shift_right" data-needs-op2="false">
+                        <span class="op-symbol">&raquo;</span>
+                        <span>Shift R</span>
+                    </button>
+                    <button class="op-btn" data-op="ones_complement" data-needs-op2="false">
+                        <span class="op-symbol">'</span>
+                        <span>1's Comp</span>
+                    </button>
+                    <button class="op-btn" data-op="twos_complement" data-needs-op2="false">
+                        <span class="op-symbol">2's</span>
+                        <span>2's Comp</span>
+                    </button>
+                    <button class="op-btn" data-op="increment" data-needs-op2="false">
+                        <span class="op-symbol">+1</span>
+                        <span>Increment</span>
+                    </button>
+                    <button class="op-btn" data-op="decrement" data-needs-op2="false">
+                        <span class="op-symbol">&minus;1</span>
+                        <span>Decrement</span>
+                    </button>
+                </div>
+
+                <!-- Shift positions control -->
+                <div class="shift-control" id="shiftControl">
+                    <label>Positions:</label>
+                    <input type="number" class="shift-input" id="shiftPositions" value="1" min="1" max="32">
+                </div>
+
+                <button class="calculate-btn" id="calculateBtn">
+                    <i class="fas fa-bolt" style="margin-right: 0.5rem;"></i>Calculate
+                </button>
+            </div>
+        </div>
+
+        <!-- Right Column: Result & Steps -->
+        <div>
+            <!-- Result Card -->
+            <div class="card-3d result-card" style="margin-bottom: 1.5rem;">
+                <div class="card-title">
+                    <span class="icon"><i class="fas fa-equals"></i></span>
+                    Result
+                </div>
+
+                <div class="result-placeholder" id="resultPlaceholder">
+                    <div class="big-icon"><i class="fas fa-terminal"></i></div>
+                    <p>Enter operands and select an operation</p>
+                </div>
+
+                <div class="result-content" id="resultContent">
+                    <div class="result-binary" id="resultBinary">
+                        <div class="result-label">Binary Result</div>
+                        <div class="result-value" id="resultValue"></div>
+                        <div class="result-decimal" id="resultDecimal"></div>
+                    </div>
+                    <div class="result-explanation">
+                        <div class="exp-title"><i class="fas fa-info-circle" style="margin-right: 0.4rem;"></i>Explanation</div>
+                        <pre id="resultExplanation"></pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step-by-Step Visualization Card -->
+            <div class="card-3d">
+                <div class="card-title">
+                    <span class="icon"><i class="fas fa-shoe-prints"></i></span>
+                    Step-by-Step Visualization
+                </div>
+
+                <div class="steps-container" id="stepsContainer">
+                    <div class="steps-title">
+                        <i class="fas fa-diagram-project"></i>
+                        <span id="stepsAlgorithm">Algorithm Steps</span>
+                    </div>
+                    <div id="stepsList"></div>
+                </div>
+
+                <div id="stepsPlaceholder" style="text-align: center; padding: 2rem 0; color: var(--text-muted);">
+                    <i class="fas fa-shoe-prints" style="font-size: 2rem; opacity: 0.2; margin-bottom: 0.75rem; display: block;"></i>
+                    <p style="font-size: 0.85rem;">Calculation steps will be visualized here</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>Binary Calculator &bull; Arithmetic Micro-Operations &bull; <a href="#">Computer Organization & Architecture</a></p>
+    </footer>
+
+    <script>
+    // ==================== STATE ====================
+    let selectedOperation = null;
+    let historyData = [];
+    let historyOpen = false;
+
+    // ==================== DOM REFERENCES ====================
+    const operand1Input = document.getElementById('operand1');
+    const operand2Input = document.getElementById('operand2');
+    const decDisplay1 = document.getElementById('decDisplay1');
+    const decDisplay2 = document.getElementById('decDisplay2');
+    const bitVisual1 = document.getElementById('bitVisual1');
+    const bitVisual2 = document.getElementById('bitVisual2');
+    const calculateBtn = document.getElementById('calculateBtn');
+    const shiftControl = document.getElementById('shiftControl');
+    const shiftPositions = document.getElementById('shiftPositions');
+    const op2Required = document.getElementById('op2Required');
+    const resultPlaceholder = document.getElementById('resultPlaceholder');
+    const resultContent = document.getElementById('resultContent');
+    const resultValue = document.getElementById('resultValue');
+    const resultDecimal = document.getElementById('resultDecimal');
+    const resultExplanation = document.getElementById('resultExplanation');
+    const stepsContainer = document.getElementById('stepsContainer');
+    const stepsList = document.getElementById('stepsList');
+    const stepsAlgorithm = document.getElementById('stepsAlgorithm');
+    const stepsPlaceholder = document.getElementById('stepsPlaceholder');
+    const historyToggle = document.getElementById('historyToggle');
+    const historyPanel = document.getElementById('historyPanel');
+    const historyOverlay = document.getElementById('historyOverlay');
+    const historyList = document.getElementById('historyList');
+    const historyBadge = document.getElementById('historyBadge');
+    const historyEmpty = document.getElementById('historyEmpty');
+    const clearHistoryBtn = document.getElementById('clearHistoryBtn');
+    const messageToast = document.getElementById('messageToast');
+
+    // ==================== BINARY RAIN BACKGROUND ====================
+    function createBinaryRain() {
+        const rain = document.getElementById('binaryRain');
+        const columns = Math.floor(window.innerWidth / 40);
+        
+        for (let i = 0; i < 30; i++) {
+            const digit = document.createElement('div');
+            digit.className = 'binary-digit';
+            digit.textContent = Math.random() > 0.5 ? '1' : '0';
+            digit.style.left = Math.random() * 100 + '%';
+            digit.style.animationDuration = (8 + Math.random() * 12) + 's';
+            digit.style.animationDelay = Math.random() * 10 + 's';
+            digit.style.fontSize = (10 + Math.random() * 8) + 'px';
+            rain.appendChild(digit);
+        }
+    }
+    createBinaryRain();
+
+    // ==================== REAL-TIME BINARY-TO-DECIMAL ====================
+    function binaryToDecimal(binStr) {
+        if (!binStr) return null;
+        // Validate
+        if (!/^[01]+(\.[01]+)?$/.test(binStr)) return null;
+        
+        if (binStr.includes('.')) {
+            const [intPart, fracPart] = binStr.split('.');
+            let val = intPart ? parseInt(intPart, 2) : 0;
+            for (let i = 0; i < fracPart.length; i++) {
+                val += parseInt(fracPart[i]) * Math.pow(2, -(i + 1));
+            }
+            return val;
+        }
+        return parseInt(binStr, 2);
+    }
+
+    function updateDecimalDisplay(input, display, bitVisual) {
+        const val = input.value.trim();
+        const decVal = binaryToDecimal(val);
+        
+        if (val && decVal !== null) {
+            display.querySelector('.value').textContent = Number.isInteger(decVal) ? decVal : decVal.toFixed(6).replace(/0+$/, '').replace(/\.$/, '');
+            display.classList.add('visible');
+            input.classList.add('valid');
+            input.classList.remove('invalid');
+            renderBitVisual(val, bitVisual);
+        } else if (val) {
+            display.classList.remove('visible');
+            input.classList.add('invalid');
+            input.classList.remove('valid');
+            bitVisual.innerHTML = '';
+        } else {
+            display.classList.remove('visible');
+            input.classList.remove('valid', 'invalid');
+            bitVisual.innerHTML = '';
+        }
+    }
+
+    function renderBitVisual(binStr, container) {
+        container.innerHTML = '';
+        for (let i = 0; i < binStr.length; i++) {
+            const cell = document.createElement('div');
+            cell.className = 'bit-cell';
+            if (binStr[i] === '.') {
+                cell.classList.add('point');
+                cell.textContent = '.';
+            } else if (binStr[i] === '1') {
+                cell.classList.add('one');
+                cell.textContent = '1';
+            } else {
+                cell.classList.add('zero');
+                cell.textContent = '0';
+            }
+            cell.style.animationDelay = (i * 0.03) + 's';
+            container.appendChild(cell);
+        }
+    }
+
+    operand1Input.addEventListener('input', () => updateDecimalDisplay(operand1Input, decDisplay1, bitVisual1));
+    operand2Input.addEventListener('input', () => updateDecimalDisplay(operand2Input, decDisplay2, bitVisual2));
+
+    // ==================== OPERATION SELECTION ====================
+    document.querySelectorAll('.op-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            // Remove active from all
+            document.querySelectorAll('.op-btn').forEach(b => b.classList.remove('active'));
+            // Set active
+            btn.classList.add('active');
+            selectedOperation = btn.dataset.op;
+            
+            // Show/hide shift positions control
+            const isShift = selectedOperation === 'shift_left' || selectedOperation === 'shift_right';
+            shiftControl.classList.toggle('visible', isShift);
+            
+            // Show/hide operand 2 requirement
+            const needsOp2 = btn.dataset.needsOp2 === 'true';
+            op2Required.style.display = needsOp2 ? 'inline' : 'none';
+            operand2Input.parentElement.parentElement.style.opacity = needsOp2 ? '1' : '0.5';
+        });
+    });
+
+    // ==================== CALCULATION ====================
+    calculateBtn.addEventListener('click', performCalculation);
+
+    // Allow Enter key to trigger calculation
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && selectedOperation) {
+            performCalculation();
+        }
+    });
+
+    async function performCalculation() {
+        if (!selectedOperation) {
+            showToast('Please select an operation first', 'error');
+            return;
+        }
+
+        const op1 = operand1Input.value.trim();
+        const op2 = operand2Input.value.trim();
+
+        if (!op1) {
+            showToast('Please enter Operand 1', 'error');
+            operand1Input.focus();
+            return;
+        }
+
+        const needsOp2 = ['addition', 'subtraction', 'multiplication', 'division'].includes(selectedOperation);
+        if (needsOp2 && !op2) {
+            showToast('Please enter Operand 2 for this operation', 'error');
+            operand2Input.focus();
+            return;
+        }
+
+        // Loading state
+        calculateBtn.classList.add('loading');
+        calculateBtn.innerHTML = '<i class="fas fa-spinner fa-spin" style="margin-right: 0.5rem;"></i>Calculating...';
+
+        try {
+            const response = await fetch('/calculate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    operation: selectedOperation,
+                    operand1: op1,
+                    operand2: op2,
+                    positions: parseInt(shiftPositions.value) || 1
+                })
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                displayResult(data);
+                showToast('Calculation complete!', 'success');
+            } else {
+                showToast(data.error || 'Calculation failed', 'error');
+                shakeElement(resultPlaceholder.closest('.card-3d'));
+            }
+        } catch (err) {
+            showToast('Network error: ' + err.message, 'error');
+        } finally {
+            calculateBtn.classList.remove('loading');
+            calculateBtn.innerHTML = '<i class="fas fa-bolt" style="margin-right: 0.5rem;"></i>Calculate';
+        }
+    }
+
+    // ==================== DISPLAY RESULT ====================
+    function displayResult(data) {
+        resultPlaceholder.style.display = 'none';
+        resultContent.classList.add('visible');
+
+        // Handle division result specially
+        if (data.result && typeof data.result === 'string' && data.result.includes('Quotient:')) {
+            displayDivisionResult(data);
+        } else {
+            resultValue.textContent = data.result;
+            
+            // Calculate decimal equivalent
+            const binStr = String(data.result);
+            const decVal = binaryToDecimal(binStr);
+            if (decVal !== null) {
+                resultDecimal.textContent = `= ${Number.isInteger(decVal) ? decVal : decVal.toFixed(6).replace(/0+$/, '').replace(/\.$/, '')} in decimal`;
+            } else {
+                resultDecimal.textContent = data.decimal_operand1 !== undefined ? '' : '';
+            }
+        }
+
+        // Explanation
+        resultExplanation.textContent = data.explanation || '';
+
+        // Steps visualization
+        if (data.steps && data.steps.length > 0) {
+            displaySteps(data.steps, data.operation || selectedOperation);
+        } else if (data.steps && typeof data.steps === 'object' && !Array.isArray(data.steps)) {
+            displayObjectSteps(data.steps, data.operation || selectedOperation);
+        } else {
+            stepsContainer.classList.remove('visible');
+            stepsPlaceholder.style.display = 'block';
+        }
+
+        // Update history
+        if (data.history_entry) {
+            historyData.unshift(data.history_entry);
+            updateHistoryBadge();
+            renderHistoryEntry(data.history_entry, true);
+        }
+    }
+
+    function displayDivisionResult(data) {
+        const resultStr = data.result;
+        const quotientMatch = resultStr.match(/Quotient:\s*(\S+)/);
+        const remainderMatch = resultStr.match(/Remainder:\s*(\S+)/);
+        
+        let html = '<div class="division-result">';
+        if (quotientMatch) {
+            html += `<div class="division-part">
+                <div class="div-label">Quotient</div>
+                <div class="div-value">${quotientMatch[1]}</div>
+            </div>`;
+        }
+        if (remainderMatch) {
+            html += `<div class="division-part">
+                <div class="div-label">Remainder</div>
+                <div class="div-value">${remainderMatch[1]}</div>
+            </div>`;
+        }
+        html += '</div>';
+        
+        document.getElementById('resultBinary').innerHTML = `
+            <div class="result-label">Division Result</div>
+            ${html}
+        `;
+        resultExplanation.textContent = data.explanation || '';
+    }
+
+    // ==================== STEP VISUALIZATION ====================
+    function displaySteps(steps, operation) {
+        stepsContainer.classList.add('visible');
+        stepsPlaceholder.style.display = 'none';
+        stepsList.innerHTML = '';
+
+        // Set algorithm name
+        const algoNames = {
+            'addition': 'Full Adder Logic',
+            'subtraction': "2's Complement Method",
+            'multiplication': 'Shift-and-Add Algorithm',
+            'division': 'Restoring Division Algorithm',
+            'shift_left': 'Logical Shift Left',
+            'shift_right': 'Logical Shift Right',
+            'ones_complement': "1's Complement",
+            'twos_complement': "2's Complement",
+            'increment': 'Increment (Add 1)',
+            'decrement': 'Decrement (Subtract 1)'
+        };
+        stepsAlgorithm.textContent = algoNames[operation] || 'Calculation Steps';
+
+        // Handle floating-point step format
+        if (steps.length === 1 && steps[0].type === 'floating_point') {
+            const step = steps[0];
+            const item = document.createElement('div');
+            item.className = 'step-item';
+            item.style.animationDelay = '0s';
+            item.innerHTML = `
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <div class="step-phase">Floating-Point Arithmetic</div>
+                    <div class="step-desc">Operation performed in decimal domain</div>
+                    <div class="step-result">${step.decimal_op}</div>
+                </div>
+            `;
+            stepsList.appendChild(item);
+            return;
+        }
+
+        steps.forEach((step, index) => {
+            const item = document.createElement('div');
+            item.className = 'step-item';
+            item.style.animationDelay = (index * 0.15) + 's';
+
+            if (operation === 'addition' || operation === 'increment') {
+                // Full adder steps
+                item.innerHTML = `
+                    <div class="step-number">${index + 1}</div>
+                    <div class="step-content">
+                        <div class="step-phase">Bit Position ${step.position} (from LSB)</div>
+                        <div class="step-desc">A=${step.bit_a} B=${step.bit_b} Carry_in=${step.carry_in}</div>
+                        <div class="step-desc">Sum = ${step.bit_a} ⊕ ${step.bit_b} ⊕ ${step.carry_in} = <strong>${step.sum}</strong></div>
+                        <div class="step-desc">Carry_out = (${step.bit_a}·${step.bit_b}) ∨ (${step.carry_in}·(${step.bit_a}⊕${step.bit_b})) = <strong>${step.carry_out}</strong></div>
+                        <div class="step-result">Sum bit: ${step.sum}, Carry: ${step.carry_out}</div>
+                    </div>
+                `;
+            } else if (operation === 'multiplication') {
+                item.innerHTML = `
+                    <div class="step-number mult-iteration ${step.action === 'Add' ? 'add' : 'skip'}">${step.iteration}</div>
+                    <div class="step-content">
+                        <div class="step-phase">Multiplier Bit ${step.iteration}: ${step.multiplier_bit}</div>
+                        <div class="step-desc">${step.action === 'Add' 
+                            ? `Shifted multiplicand << ${step.shift_amount} = ${step.shifted_value}`
+                            : 'Bit is 0, skip addition'}</div>
+                        ${step.action === 'Add' ? `<div class="step-result">Partial product: ${step.partial_product}</div>` : ''}
+                    </div>
+                `;
+            } else if (operation === 'division') {
+                item.innerHTML = `
+                    <div class="step-number">${step.step}</div>
+                    <div class="step-content">
+                        <div class="step-phase">Step ${step.step}: Bring down bit ${step.bit_brought_down}</div>
+                        <div class="step-desc">${step.action}</div>
+                        <div class="step-result">Quotient bit: ${step.quotient_bit}</div>
+                    </div>
+                `;
+            } else if (operation === 'shift_left' || operation === 'shift_right') {
+                item.innerHTML = `
+                    <div class="step-number">${step.shift}</div>
+                    <div class="step-content">
+                        <div class="step-phase">Shift ${step.shift}</div>
+                        <div class="step-desc">${step.before} → ${step.after}</div>
+                        <div class="step-result">${step.effect} (bit shifted out: ${step.bit_shifted_out})</div>
+                    </div>
+                `;
+            } else if (operation === 'ones_complement') {
+                item.innerHTML = `
+                    <div class="step-number">${index + 1}</div>
+                    <div class="step-content">
+                        <div class="step-phase">Position ${step.position}</div>
+                        <div class="step-desc">${step.original} → ${step.inverted}</div>
+                    </div>
+                `;
+            } else if (operation === 'subtraction' || operation === 'decrement') {
+                item.innerHTML = `
+                    <div class="step-number">${index + 1}</div>
+                    <div class="step-content">
+                        <div class="step-phase">${step.phase || 'Step ' + (index + 1)}</div>
+                        <div class="step-desc">${step.description || ''}</div>
+                        ${step.result ? `<div class="step-result">Result: ${step.result}</div>` : ''}
+                    </div>
+                `;
+            } else {
+                // Generic step
+                item.innerHTML = `
+                    <div class="step-number">${index + 1}</div>
+                    <div class="step-content">
+                        <div class="step-phase">Step ${index + 1}</div>
+                        <div class="step-desc">${JSON.stringify(step)}</div>
+                    </div>
+                `;
+            }
+
+            stepsList.appendChild(item);
+        });
+    }
+
+    function displayObjectSteps(steps, operation) {
+        stepsContainer.classList.add('visible');
+        stepsPlaceholder.style.display = 'none';
+        stepsList.innerHTML = '';
+
+        const algoNames = {
+            'twos_complement': "2's Complement (Invert + Add 1)",
+        };
+        stepsAlgorithm.textContent = algoNames[operation] || 'Calculation Steps';
+
+        let stepIndex = 0;
+
+        // Handle 2's complement steps
+        if (steps.ones_complement) {
+            const ones = steps.ones_complement;
+            const item = document.createElement('div');
+            item.className = 'step-item';
+            item.style.animationDelay = (stepIndex * 0.15) + 's';
+            item.innerHTML = `
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <div class="step-phase">Step 1: 1's Complement (Invert all bits)</div>
+                    <div class="step-desc">Result: ${ones.result}</div>
+                </div>
+            `;
+            stepsList.appendChild(item);
+            stepIndex++;
+        }
+
+        if (steps.add_one) {
+            const addOne = steps.add_one;
+            const item = document.createElement('div');
+            item.className = 'step-item';
+            item.style.animationDelay = (stepIndex * 0.15) + 's';
+            item.innerHTML = `
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <div class="step-phase">Step 2: Add 1</div>
+                    <div class="step-desc">${addOne.operation}</div>
+                    <div class="step-result">Result: ${addOne.result} (Carry: ${addOne.carry})</div>
+                </div>
+            `;
+            stepsList.appendChild(item);
+            stepIndex++;
+
+            // Show adder steps if available
+            if (addOne.add_steps && addOne.add_steps.length > 0) {
+                addOne.add_steps.forEach((s, i) => {
+                    const subItem = document.createElement('div');
+                    subItem.className = 'step-item';
+                    subItem.style.animationDelay = ((stepIndex + i) * 0.15) + 's';
+                    subItem.innerHTML = `
+                        <div class="step-number" style="background: var(--accent);">${i + 1}</div>
+                        <div class="step-content">
+                            <div class="step-phase">Bit ${s.position}: A=${s.bit_a} B=${s.bit_b} Cin=${s.carry_in}</div>
+                            <div class="step-desc">Sum=${s.sum}, Cout=${s.carry_out}</div>
+                        </div>
+                    `;
+                    stepsList.appendChild(subItem);
+                });
+            }
+        }
+
+        // Handle subtraction steps
+        if (steps.phase) {
+            const item = document.createElement('div');
+            item.className = 'step-item';
+            item.style.animationDelay = (stepIndex * 0.15) + 's';
+            item.innerHTML = `
+                <div class="step-number">${stepIndex + 1}</div>
+                <div class="step-content">
+                    <div class="step-phase">${steps.phase}</div>
+                    <div class="step-desc">${steps.description || ''}</div>
+                    ${steps.result ? `<div class="step-result">${steps.result}</div>` : ''}
+                </div>
+            `;
+            stepsList.appendChild(item);
+        }
+
+        // Generic object step handling (for subtraction with phases array)
+        if (Array.isArray(steps)) {
+            displaySteps(steps, operation);
+        }
+    }
+
+    // ==================== HISTORY ====================
+    function loadHistory() {
+        // Try localStorage first, then fetch from server
+        const localHistory = localStorage.getItem('binaryCalcHistory');
+        if (localHistory) {
+            try {
+                historyData = JSON.parse(localHistory);
+            } catch (e) {
+                historyData = [];
+            }
+        }
+        
+        // Also fetch from server
+        fetch('/history')
+            .then(r => r.json())
+            .then(data => {
+                if (data.success && data.history && data.history.length > 0) {
+                    // Merge server history with local (prefer server)
+                    historyData = data.history;
+                    saveHistoryLocal();
+                    renderHistory();
+                } else if (historyData.length > 0) {
+                    renderHistory();
+                }
+            })
+            .catch(() => {
+                // Fallback to localStorage
+                if (historyData.length > 0) {
+                    renderHistory();
+                }
+            });
+    }
+
+    function saveHistoryLocal() {
+        localStorage.setItem('binaryCalcHistory', JSON.stringify(historyData));
+    }
+
+    function updateHistoryBadge() {
+        const count = historyData.length;
+        historyBadge.textContent = count > 99 ? '99+' : count;
+        historyBadge.classList.toggle('visible', count > 0);
+    }
+
+    function renderHistory() {
+        historyList.innerHTML = '';
+        
+        if (historyData.length === 0) {
+            historyList.innerHTML = `
+                <div class="history-empty">
+                    <div class="empty-icon"><i class="fas fa-calculator"></i></div>
+                    <p>No calculations yet</p>
+                    <p style="font-size: 0.75rem; margin-top: 0.5rem;">Your calculation history will appear here</p>
+                </div>
+            `;
+            updateHistoryBadge();
+            return;
+        }
+
+        historyData.forEach((entry, index) => {
+            renderHistoryEntry(entry, false, index);
+        });
+
+        updateHistoryBadge();
+    }
+
+    function renderHistoryEntry(entry, prepend, index) {
+        // Remove empty state
+        const emptyState = historyList.querySelector('.history-empty');
+        if (emptyState) emptyState.remove();
+
+        const div = document.createElement('div');
+        div.className = 'history-entry';
+        div.dataset.id = entry.id || '';
+        
+        const opIcons = {
+            'addition': 'fa-plus', 'subtraction': 'fa-minus',
+            'multiplication': 'fa-xmark', 'division': 'fa-divide',
+            'shift_left': 'fa-angles-left', 'shift_right': 'fa-angles-right',
+            'ones_complement': "fa-exclamation", 'twos_complement': 'fa-2',
+            'increment': 'fa-arrow-up', 'decrement': 'fa-arrow-down'
+        };
+
+        const icon = opIcons[entry.operation] || 'fa-calculator';
+        const time = entry.timestamp ? new Date(entry.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
+        
+        div.innerHTML = `
+            <div class="entry-header">
+                <span class="entry-operation"><i class="fas ${icon}" style="margin-right: 0.3rem;"></i>${entry.operation.replace('_', ' ')}</span>
+                <span class="entry-time">${time}</span>
+            </div>
+            <div class="entry-calc">${entry.operand1}${entry.operand2 ? ' op ' + entry.operand2 : ''}</div>
+            <div class="entry-result">${typeof entry.result === 'string' ? entry.result : JSON.stringify(entry.result)}</div>
+        `;
+
+        // Click to reuse calculation
+        div.addEventListener('click', (e) => {
+            if (e.target.closest('.entry-delete')) return;
+            operand1Input.value = entry.operand1 || '';
+            operand2Input.value = entry.operand2 || '';
+            updateDecimalDisplay(operand1Input, decDisplay1, bitVisual1);
+            updateDecimalDisplay(operand2Input, decDisplay2, bitVisual2);
+            
+            // Select the operation
+            const opBtn = document.querySelector(`.op-btn[data-op="${entry.operation}"]`);
+            if (opBtn) opBtn.click();
+            
+            toggleHistoryPanel(false);
+            showToast('Calculation loaded', 'success');
+        });
+
+        if (prepend) {
+            historyList.prepend(div);
+        } else {
+            historyList.appendChild(div);
+        }
+    }
+
+    function toggleHistoryPanel(open) {
+        if (typeof open === 'boolean') {
+            historyOpen = !open;
+        }
+        historyOpen = !historyOpen;
+        historyPanel.classList.toggle('open', historyOpen);
+        historyOverlay.classList.toggle('visible', historyOpen);
+    }
+
+    historyToggle.addEventListener('click', () => toggleHistoryPanel());
+    historyOverlay.addEventListener('click', () => toggleHistoryPanel(false));
+
+    clearHistoryBtn.addEventListener('click', async () => {
+        if (!confirm('Clear all calculation history?')) return;
+        
+        try {
+            await fetch('/history/clear', { method: 'POST' });
+        } catch (e) {}
+        
+        historyData = [];
+        saveHistoryLocal();
+        renderHistory();
+        showToast('History cleared', 'success');
+    });
+
+    // ==================== TOAST MESSAGES ====================
+    function showToast(message, type = 'success') {
+        messageToast.textContent = message;
+        messageToast.className = `message-toast ${type} visible`;
+        
+        setTimeout(() => {
+            messageToast.classList.remove('visible');
+        }, 3000);
+    }
+
+    // ==================== SHAKE ANIMATION ====================
+    function shakeElement(el) {
+        el.classList.add('shake');
+        setTimeout(() => el.classList.remove('shake'), 500);
+    }
+
+    // ==================== 3D CARD TILT EFFECT ====================
+    document.querySelectorAll('.card-3d').forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            const rotateX = (y - centerY) / 30;
+            const rotateY = (centerX - x) / 30;
+            
+            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
+        });
+
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = '';
+        });
+    });
+
+    // ==================== INPUT FILTERING ====================
+    [operand1Input, operand2Input].forEach(input => {
+        input.addEventListener('keypress', (e) => {
+            // Allow: 0, 1, ., Backspace, Delete, Arrow keys, Tab
+            if (!/[01]/.test(e.key) && e.key !== '.' && e.key !== 'Backspace' && 
+                e.key !== 'Delete' && !e.key.startsWith('Arrow') && e.key !== 'Tab') {
+                // Allow control keys
+                if (!e.ctrlKey && !e.metaKey) {
+                    e.preventDefault();
+                }
+            }
+            // Prevent multiple decimal points
+            if (e.key === '.' && input.value.includes('.')) {
+                e.preventDefault();
+            }
+        });
+    });
+
+    // ==================== INITIALIZE ====================
+    loadHistory();
+
+    // Add keyboard shortcut hints
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            toggleHistoryPanel(false);
+        }
+        if (e.key === 'h' && !e.ctrlKey && !e.metaKey && document.activeElement.tagName !== 'INPUT') {
+            toggleHistoryPanel();
+        }
+    });
+    </script>
+</body>
+</html>

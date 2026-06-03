@@ -1,0 +1,30 @@
+/workspace/app.py
+/workspace/.browser_data/ShaderCache/data_1
+/workspace/.browser_data/ShaderCache/data_3
+/workspace/.browser_data/ShaderCache/index
+/workspace/.browser_data/ShaderCache/data_0
+/workspace/.browser_data/ShaderCache/data_2
+/workspace/.browser_data/segmentation_platform/ukm_db-wal
+/workspace/.browser_data/segmentation_platform/ukm_db
+/workspace/.browser_data/Local State
+/workspace/.browser_data/component_crx_cache/metadata.json
+/workspace/.browser_data/Last Version
+/workspace/.browser_data/first_party_sets.db-journal
+/workspace/.browser_data/first_party_sets.db
+/workspace/.browser_data/GrShaderCache/data_1
+/workspace/.browser_data/GrShaderCache/data_3
+/workspace/.browser_data/GrShaderCache/index
+/workspace/.browser_data/GrShaderCache/data_0
+/workspace/.browser_data/GrShaderCache/data_2
+/workspace/.browser_data/GraphiteDawnCache/data_1
+/workspace/.browser_data/GraphiteDawnCache/data_3
+/workspace/.browser_data/GraphiteDawnCache/index
+/workspace/.browser_data/GraphiteDawnCache/data_0
+/workspace/.browser_data/GraphiteDawnCache/data_2
+/workspace/.browser_data/Default/Sessions/Session_13421831276408173
+/workspace/.browser_data/Default/Sessions/Tabs_13421921248802640
+/workspace/.browser_data/Default/heavy_ad_intervention_opt_out.db
+/workspace/.browser_data/Default/Feature Engagement Tracker/AvailabilityDB/LOG.old
+/workspace/.browser_data/Default/Feature Engagement Tracker/AvailabilityDB/LOCK
+/workspace/.browser_data/Default/Feature Engagement Tracker/AvailabilityDB/LOG
+/workspace/.browser_data/Default/Feature Engagement Tracker/EventDB/LOG.old

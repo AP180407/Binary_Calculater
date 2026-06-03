@@ -1,0 +1,101 @@
+[
+  {
+    "id": 11,
+    "timestamp": "2026-05-02T08:27:43.647782",
+    "operation": "decrement",
+    "operand1": "11101101",
+    "operand2": "0001111011",
+    "result": "11101100",
+    "explanation": "Decrement: 11101101 - 1 = 11101100\nDecimal: 237 - 1 = 236"
+  },
+  {
+    "id": 10,
+    "timestamp": "2026-05-02T08:26:25.867985",
+    "operation": "increment",
+    "operand1": "11101101",
+    "operand2": "0001111011",
+    "result": "11101110",
+    "explanation": "Increment: 11101101 + 1 = 11101110\nDecimal: 237 + 1 = 238"
+  },
+  {
+    "id": 9,
+    "timestamp": "2026-05-02T08:26:15.083952",
+    "operation": "ones_complement",
+    "operand1": "11101101",
+    "operand2": "0001111011",
+    "result": "00010010",
+    "explanation": "1's Complement: 11101101 \u2192 00010010\nMethod: Invert all bits (0\u21921, 1\u21920)\nDecimal: 237 \u2192 18"
+  },
+  {
+    "id": 8,
+    "timestamp": "2026-05-02T08:26:04.155980",
+    "operation": "twos_complement",
+    "operand1": "11101101",
+    "operand2": "0001111011",
+    "result": "00010011",
+    "explanation": "2's Complement: 11101101 \u2192 00010011\nMethod: 1's complement + 1\nDecimal: 237 \u2192 -237"
+  },
+  {
+    "id": 7,
+    "timestamp": "2026-05-02T08:25:54.099038",
+    "operation": "shift_right",
+    "operand1": "11101101",
+    "operand2": "0001111011",
+    "result": "1110110",
+    "explanation": "Logical Shift Right by 1 position(s): 11101101 \u2192 1110110\nEffect: Division by 2^1 = 2 (for unsigned)\nDecimal: 237 \u00f7 2 = 118"
+  },
+  {
+    "id": 6,
+    "timestamp": "2026-05-02T08:25:28.456520",
+    "operation": "division",
+    "operand1": "11101101",
+    "operand2": "0001111011",
+    "result": "Quotient: 1, Remainder: 1110010",
+    "explanation": "Binary Division: 11101101 \u00f7 0001111011\nQuotient: 1, Remainder: 1110010\nDecimal: 237 \u00f7 123 = 1 R 114"
+  },
+  {
+    "id": 5,
+    "timestamp": "2026-05-02T08:25:21.041963",
+    "operation": "multiplication",
+    "operand1": "11101101",
+    "operand2": "0001111011",
+    "result": "111000111011111",
+    "explanation": "Binary Multiplication: 11101101 \u00d7 0001111011 = 111000111011111\nMethod: Shift and Add\nDecimal: 237 \u00d7 123 = 29151"
+  },
+  {
+    "id": 4,
+    "timestamp": "2026-05-02T08:23:53.295191",
+    "operation": "addition",
+    "operand1": "11101101",
+    "operand2": "0001111011",
+    "result": "0101101000",
+    "explanation": "Binary Addition: 11101101 + 0001111011 = 0101101000\nDecimal: 237 + 123 = 360"
+  },
+  {
+    "id": 3,
+    "timestamp": "2026-05-02T08:23:06.904160",
+    "operation": "addition",
+    "operand1": "100110010011.0111",
+    "operand2": "100111001010101101",
+    "result": "100111110001000000.0111",
+    "explanation": "Binary Addition: 100110010011.0111 + 100111001010101101 = 100111110001000000.0111\nDecimal: 2451.4375 + 160429 = 162880.4375"
+  },
+  {
+    "id": 2,
+    "timestamp": "2026-04-29T21:50:04.058117",
+    "operation": "twos_complement",
+    "operand1": "111110010",
+    "operand2": "1110100111",
+    "result": "000001110",
+    "explanation": "2's Complement: 111110010 \u2192 000001110\nMethod: 1's complement + 1\nDecimal: 498 \u2192 -498"
+  },
+  {
+    "id": 1,
+    "timestamp": "2026-04-29T21:49:45.970205",
+    "operation": "decrement",
+    "operand1": "111110010",
+    "operand2": "1110100111",
+    "result": "111110001",
+    "explanation": "Decrement: 111110010 - 1 = 111110001\nDecimal: 498 - 1 = 497"
+  }
+]

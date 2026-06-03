@@ -1,0 +1,46 @@
+============================================================
+  Arithmetic Micro-Operations Calculator
+  Web Application for Computer Organization & Architecture
+============================================================
+
+Starting server on http://localhost:5000
+Press Ctrl+C to stop the server
+
+ * Serving Flask app 'app'
+ * Debug mode: on
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://172.20.190.81:5001
+[33mPress CTRL+C to quit[0m
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 123-328-729
+127.0.0.1 - - [29/Apr/2026 07:48:42] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [29/Apr/2026 07:48:42] "GET /static/styles.css HTTP/1.1" 200 -
+127.0.0.1 - - [29/Apr/2026 07:48:43] "GET /history HTTP/1.1" 200 -
+127.0.0.1 - - [29/Apr/2026 07:48:43] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+127.0.0.1 - - [29/Apr/2026 07:49:53] "POST /calculate HTTP/1.1" 200 -
+127.0.0.1 - - [29/Apr/2026 07:50:42] "POST /calculate HTTP/1.1" 200 -
+127.0.0.1 - - [29/Apr/2026 07:51:28] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [29/Apr/2026 07:51:28] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [29/Apr/2026 07:51:28] "GET /history HTTP/1.1" 200 -
+127.0.0.1 - - [29/Apr/2026 07:51:54] "POST /calculate HTTP/1.1" 200 -
+127.0.0.1 - - [29/Apr/2026 07:53:41] "GET /?password=df8ec993-5335-4e8e-97cc-31588f84be4d HTTP/1.1" 200 -
+172.20.0.1 - - [29/Apr/2026 07:53:42] "GET /?hideControls=true&password=df8ec993-5335-4e8e-97cc-31588f84be4d HTTP/1.1" 200 -
+172.20.0.1 - - [29/Apr/2026 07:53:48] "GET /static/styles.css HTTP/1.1" 200 -
+172.20.0.1 - - [29/Apr/2026 07:53:50] "GET /history HTTP/1.1" 200 -
+172.20.0.1 - - [29/Apr/2026 08:02:45] "POST /calculate HTTP/1.1" 200 -
+172.20.0.1 - - [29/Apr/2026 08:03:41] "POST /calculate HTTP/1.1" 200 -
+172.20.0.1 - - [29/Apr/2026 08:04:13] "POST /calculate HTTP/1.1" 200 -
+172.20.0.1 - - [29/Apr/2026 08:04:27] "POST /calculate HTTP/1.1" 200 -
+172.20.0.1 - - [29/Apr/2026 08:04:44] "POST /calculate HTTP/1.1" 200 -
+172.20.0.1 - - [29/Apr/2026 08:04:52] "POST /calculate HTTP/1.1" 200 -
+172.20.0.1 - - [29/Apr/2026 08:04:58] "POST /calculate HTTP/1.1" 200 -
+172.20.0.1 - - [29/Apr/2026 08:05:30] "POST /calculate HTTP/1.1" 200 -
+172.20.0.1 - - [29/Apr/2026 08:05:47] "POST /calculate HTTP/1.1" 200 -
+172.20.0.1 - - [29/Apr/2026 08:06:20] "POST /calculate HTTP/1.1" 200 -
+172.20.0.1 - - [29/Apr/2026 08:06:39] "POST /calculate HTTP/1.1" 200 -
+172.20.0.1 - - [29/Apr/2026 08:07:08] "POST /calculate HTTP/1.1" 200 -
+172.20.0.1 - - [29/Apr/2026 08:07:58] "POST /calculate HTTP/1.1" 200 -
+172.20.0.1 - - [29/Apr/2026 08:08:07] "POST /calculate HTTP/1.1" 200 -
